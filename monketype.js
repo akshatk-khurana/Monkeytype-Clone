@@ -38,6 +38,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
 
+            moveCursor(cursor, numberOfWords);
+
         } else if (event.key === "Backspace") {
             // pass
         }
@@ -71,4 +73,20 @@ function getElementBasedOnCursor(cursor) {
     const thisCharDiv = allCharDivs[cursor[1]];
 
     return thisCharDiv;
+}
+
+function moveCursor(cursor, numWords) {
+    const parent = getElementBasedOnCursor(cursor).parentElement;
+    const maxIndex = parent.children.length - 1;
+
+    if (cursor[1] == maxIndex) {
+        if (cursor[0] == numWords - 1) {
+            console.log("End!");
+        } else {
+            cursor[0]++;
+            cursor[1] = 0;
+        }
+    } else {
+        cursor[1]++;
+    }
 }
