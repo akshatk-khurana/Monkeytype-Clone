@@ -36,6 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function whenKeyPressed(event) {
     const key = event.key;
+    let move = true;
 
     if ('abcdefghijklmnopqrstuvwxyz '.includes(key) || key == "Space") {
         let currentElement = getElementBasedOnCursor(cursor);
@@ -44,21 +45,30 @@ function whenKeyPressed(event) {
         if (typed === currentElement.innerHTML) {
             currentElement.classList.add("correct");
         } else {
-            currentElement.classList.add("incorrect")
+            currentElement.classList.add("incorrect");
 
             // If space is pressed wrong
             if (currentElement.innerHTML === "&nbsp;") {
-                console.log("Hello")
-
-                const charElement = document.createElement("div");
-                charElement.className = "char-div incorrect";
-                charElement.innerHTML = typed;                
+                move = false;
+                
+                const elementBeforeSpace = textDiv.children[cursor[0] - 1];
+                let incorrectExtraCount = elementBeforeSpace.querySelectorAll(".extra").length;
+                
+                // Add additional characters
+                if (incorrectExtraCount < 19) {
+                    const charElement = document.createElement("div");
+                    charElement.className = "char-div incorrect extra";
+                    charElement.innerHTML = typed;    
+                    elementBeforeSpace.appendChild(charElement);
+                }
             }
         }
 
-        updateBorder(cursor, false);
-        moveCursor(cursor, numberOfWordsWithSpaces, false);
-        updateBorder(cursor, true);
+        if (move) {
+            updateBorder(cursor, false);
+            moveCursor(cursor, numberOfWordsWithSpaces, false);
+            updateBorder(cursor, true);
+        }
 
     } else if (event.key === "Backspace") {
         moveCursor(cursor, numberOfWordsWithSpaces, true);
@@ -117,11 +127,17 @@ function moveCursor(cursor, numWords, back) {
         }
 
         const beforeElement = getElementBasedOnCursor(newCursor);
+        
         if (anyIncorrectSoFar(cursor)) {
-            beforeElement.className = "char-div";
             updateBorder(cursor, false);
-            cursor[0] = newCursor[0];
-            cursor[1] = newCursor[1];
+            if (beforeElement.classList.contains("extra")) {
+                beforeElement.remove()
+            } else {
+                beforeElement.className = "char-div";
+                cursor[0] = newCursor[0];
+                cursor[1] = newCursor[1];
+            }
+
             updateBorder(cursor, true);
         }
     } else {
@@ -141,7 +157,7 @@ function anyIncorrectSoFar(cursor) {
 
     for (let i = 0; i <= cursor[0]; i++) {
         const charDivs = wordDivs[i].children;
-        for (let j = 0; j < charDivs.length; i++) {
+        for (let j = 0; j < charDivs.length; j++) {
             if (charDivs[j].classList.contains("incorrect")) {
                 return true;
             }
