@@ -47,25 +47,21 @@ function whenKeyPressed(event) {
             currentElement.classList.add("incorrect")
 
             // If space is pressed wrong
-            console.log(currentElement.parentElement);
             if (currentElement.innerHTML === "&nbsp;") {
                 console.log("Hello")
 
                 const charElement = document.createElement("div");
                 charElement.className = "char-div incorrect";
-                charElement.innerHTML = typed;
-
-                getElementBasedOnCursor(cursor).parentElement.appendChild(charElement);
-                moveCursor(cursor, numberOfWordsWithSpaces);
+                charElement.innerHTML = typed;                
             }
         }
 
         updateBorder(cursor, false);
-        moveCursor(cursor, numberOfWordsWithSpaces);
+        moveCursor(cursor, numberOfWordsWithSpaces, false);
         updateBorder(cursor, true);
 
     } else if (event.key === "Backspace") {
-        // pass
+        moveCursor(cursor, numberOfWordsWithSpaces, true);
     }
 }
 
@@ -102,18 +98,54 @@ function getElementBasedOnCursor(cursor) {
     return thisCharDiv;
 }
 
-function moveCursor(cursor, numWords) {
+function moveCursor(cursor, numWords, back) {
     const parent = getElementBasedOnCursor(cursor).parentElement;
     const maxIndex = parent.children.length - 1;
 
-    if (cursor[1] == maxIndex) {
-        if (cursor[0] == numWords - 1) {
-            console.log("End!");
+    if (back) {
+        // A temporary cursor variable
+        const newCursor = [cursor[0], cursor[1]];
+
+        if (newCursor[1] == 0) {
+            if (newCursor[0] != 0) {
+                newCursor[0]--;
+                let max = getElementBasedOnCursor([newCursor[0], 0]).parentElement.children.length; 
+                newCursor[1] = max - 1;
+            }
         } else {
-            cursor[0]++;
-            cursor[1] = 0;
+            newCursor[1]--;
+        }
+
+        const beforeElement = getElementBasedOnCursor(newCursor);
+        if (anyIncorrectSoFar(cursor)) {
+            beforeElement.className = "char-div";
+            updateBorder(cursor, false);
+            cursor[0] = newCursor[0];
+            cursor[1] = newCursor[1];
+            updateBorder(cursor, true);
         }
     } else {
-        cursor[1]++;
+        if (cursor[1] == maxIndex) {
+            if (cursor[0] != numWords - 1) {
+                cursor[0]++;
+                cursor[1] = 0;
+            }
+        } else {
+            cursor[1]++;
+        }
     }
+}
+
+function anyIncorrectSoFar(cursor) {
+    const wordDivs = textDiv.children;
+
+    for (let i = 0; i <= cursor[0]; i++) {
+        const charDivs = wordDivs[i].children;
+        for (let j = 0; j < charDivs.length; i++) {
+            if (charDivs[j].classList.contains("incorrect")) {
+                return true;
+            }
+        }
+    }
+    return false;
 }
