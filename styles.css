@@ -3,7 +3,7 @@
 * {
     user-select: none;
     font-family: 'Roboto Mono';
-    color: rgb(255, 225, 0);
+    color: #e2b714;
 }
 
 ::-webkit-scrollbar {
@@ -32,10 +32,6 @@ h1 {
     flex-wrap: wrap;
 }
 
-.word-div {
-    margin: 10px;
-}
-
 .char-div {
     color: rgba(220, 220, 220, 0.477);
 }
@@ -46,4 +42,12 @@ h1 {
     height: 150px;
     overflow: scroll;
     padding: 50px;
+}
+
+.correct {
+    color: #d1d0c5;
+}
+
+.incorrect {
+    color: #ca4754;
 }
