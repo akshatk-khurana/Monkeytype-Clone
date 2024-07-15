@@ -11,7 +11,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const wpmYValues = [];
 
     Object.keys(brokenDown).forEach(key => {
-        const stats = calculateStats(brokenDown[key]);
+        const info = brokenDown[key];
+        console.log(info)
+
+        const stats = calculateStats(info);
 
         timeXValues.push(key);
         rawYValues.push(stats["raw"])

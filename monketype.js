@@ -8,23 +8,10 @@ let started = false;
 // For calculating stats
 let startTime;
 let endTime;
-let typingData = {};
-
+const typingData = {};
 
 document.addEventListener('DOMContentLoaded', () => {
     fetchWordsAndSetup(numberOfWords);
-
-    setInterval(() => {
-        let currentTime = new Date().getTime();
-        let characterCounts = countIncorrectAndCorrect();
-
-        const currData = {
-            "timeTaken" : currentTime - startTime,
-            "charCounts" : characterCounts,
-        }
-
-        typingData[toString(currData["timeTaken"])] = currData;
-    }, 500);
     
     document.addEventListener('keydown', event => {
         if (started == false) {
@@ -36,6 +23,20 @@ document.addEventListener('DOMContentLoaded', () => {
     })
 
 })
+
+setInterval(() => {
+    if (started) {
+        let currentTime = new Date().getTime();
+        let characterCounts = countIncorrectAndCorrect();
+
+        const currData = {
+            "timeTaken" : currentTime - startTime,
+            "charCounts" : characterCounts,
+        }
+
+        typingData[currData["timeTaken"]] = currData;
+    }
+}, 500);
 
 function whenKeyPressed(event) {
     const key = event.key;
@@ -220,6 +221,7 @@ function onTypeTestEnd() {
         "timeTaken" : endTime - startTime,
         "wordCount" : numberOfWords,
         "charCounts" : characterCounts,
+        "graphData" : typingData,
     }
 
     localStorage.setItem("testData", JSON.stringify(testData))
@@ -240,6 +242,7 @@ function fetchWordsAndSetup(number) {
             }
         })
     
+    request.then(response => response.json())
     .then((response) => {
         let wordsList = response["words"];
         for (let i = 0; i < wordsList.length; i++) {
