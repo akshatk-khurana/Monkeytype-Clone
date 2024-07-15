@@ -56,6 +56,7 @@ h1 {
 
 #results-div {
     margin-top: 10vh;
+    display: flex;
     width: 80vw;
     background-color: #7e2a33;
 }
@@ -63,14 +64,18 @@ h1 {
 #main-stats {
     display: flex;
     flex-wrap: wrap;
-    width: 100px;
+    width: 5vw;
 }
 
 #chart-div {
-    display: flex;
-    flex-wrap: wrap;
-    width: 900px;
-    background-color: #e2b714;
+    margin: 10px;
+    width: 100vw;
+}
+
+
+#chart {
+    height: 30vh;
+    width: 74vw;
 }
 
 div > #main-stats {

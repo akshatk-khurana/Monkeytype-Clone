@@ -15,15 +15,19 @@
                 <div id="main-stats">
                     <div>
                         <div class="small">wpm</div>
-                        <div id="wpm">50</div>
+                        <div id="wpm"></div>
                     </div>
                     <div>
                         <div class="small">acc</div>
-                        <div id="acc">50</div>
+                        <div id="acc"></div>
                     </div>
+                </div>
+                <div id="chart-div">
+                    <canvas id="chart"></canvas>
                 </div>
             </div>
         </div>
-        <script src="results.js"></script>
+        <script type="module"  src="results.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
     </body>
 </html>

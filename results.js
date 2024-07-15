@@ -4,11 +4,43 @@ const accDiv = document.querySelector('#acc');
 document.addEventListener('DOMContentLoaded', () => {
     const testInfo = JSON.parse(localStorage.getItem("testData"));
     const overallStats = calculateStats(testInfo);
+    const brokenDown = testInfo["graphData"];
+
+    const timeXValues = [];
+    const rawYValues = [];
+    const wpmYValues = [];
+
+    Object.keys(brokenDown).forEach(key => {
+        const stats = calculateStats(brokenDown[key]);
+
+        timeXValues.push(key);
+        rawYValues.push(stats["raw"])
+        wpmYValues.push(stats["wpm"])
+    });
 
     wpmDiv.innerHTML = overallStats["wpm"];
     accDiv.innerHTML = overallStats["acc"];
 
-    // code to process and display it
+    new Chart("chart", {
+        type: "line",
+        data: {
+          labels: timeXValues,
+          datasets: [{
+            data: rawYValues,
+            borderColor: "red",
+            fill: false
+          },{
+            data: wpmYValues,
+            borderColor: "green",
+            fill: false
+          }]
+        },
+        options: {
+          legend: {display: false}
+        }
+      });
+      
+      
 })
 
 function calculateStats(data) {
