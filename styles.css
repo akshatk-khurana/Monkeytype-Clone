@@ -38,10 +38,27 @@ h1 {
 
 #holder-div {
     padding: 10px;
-    margin-top: 15vh;
+    margin-top: 10vh;
     height: 150px;
     overflow: scroll;
     padding: 50px;
+}
+
+#acc, #wpm {
+    font-size: 50px;
+}
+
+#main-stats {
+    margin-left: 10vw;
+    display: flex;
+    flex-wrap: wrap;
+    width: 100px;
+    padding: 10px;
+}
+
+.small {
+    font-size: 20px;
+    color: rgba(220, 220, 220, 0.477);
 }
 
 .correct {

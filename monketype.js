@@ -84,20 +84,13 @@ function whenKeyPressed(event) {
         const updatedCurrentElement = getElementBasedOnCursor(cursor);
         const childrenCount = updatedCurrentElement.parentElement.children.length;
 
-        if (cursor[0] == numberOfWordsWithSpaces - 1 && cursor[1] == childrenCount - 1) {
-            let sameCursor = cursor[0] == oldCursor[0] && cursor[1] == oldCursor[1];
-            if (sameCursor && updatedCurrentElement.classList.contains("correct")) {
+        let endOfTest = cursor[0] == numberOfWordsWithSpaces - 1 && cursor[1] == childrenCount - 1;
+        let sameCursor = cursor[0] == oldCursor[0] && cursor[1] == oldCursor[1];
+        if (endOfTest && sameCursor) {
+            // if last character was entered correctly
+            if (updatedCurrentElement.classList.contains("correct") || typed == "&nbsp;") {
                 updateBorder(cursor, false);
-                endTime = new Date().getTime();
-
-                const testData = {
-                    "timeTaken" : endTime - startTime,
-                    "wordCount" : numberOfWords,
-                }
-
-                setTimeout(() => {
-                    window.open("results.html");
-                }, 500);
+                onTypeTestEnd();
             }
         }
 
@@ -197,10 +190,47 @@ function anyIncorrectSoFar(cursor) {
     return false;
 }
 
-function setLocalStorageKey(key, val) {
-    
+function countIncorrectAndCorrect() {
+    const wordDivs = textDiv.children;
+    let count = {
+            "inCorrectWords" : 0,
+            "inAllWords" : 0,
+        };
+
+    for (let i = 0; i <= cursor[0]; i++) {
+        const charDivs = wordDivs[i].children;
+        let allCorrect = true;
+
+        for (let j = 0; j < charDivs.length; j++) {
+            if (charDivs[j].classList.contains("incorrect")) {
+                allCorrect = false;
+                count["incorrect"]++;
+            } else if (charDivs[j].classList.contains("correct")) {
+                count["correct"]++;
+            }
+        }
+
+        if (allCorrect) {
+            count["inCorrectWords"] += charDivs.length;
+        } 
+        count["allCorrectWords"] += charDivs.length;
+    }
+    return count; 
 }
 
-function countIncorrectAndCorrect() {
-    count 
+function onTypeTestEnd() {
+    endTime = new Date().getTime();
+    const characterCounts = countIncorrectAndCorrect();
+
+    const testData = {
+        "timeTaken" : endTime - startTime,
+        "wordCount" : numberOfWords,
+        "charCounts" : characterCounts,
+    }
+
+    localStorage.setItem("testData", JSON.stringify(testData))
+
+    setTimeout(() => {
+        window.open("results.html");
+    }, 200);
 }
