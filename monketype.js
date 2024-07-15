@@ -1,7 +1,11 @@
 const textDiv = document.querySelector('#text-div');
 const cursor = [0, 0];
-let numberOfWords = 20;
+let numberOfWords = 5;
 let numberOfWordsWithSpaces = numberOfWords * 2 - 1;
+let started = false;
+
+let startTime;
+let endTime;
 
 document.addEventListener('DOMContentLoaded', () => {
     const words = [];
@@ -29,6 +33,11 @@ document.addEventListener('DOMContentLoaded', () => {
     })
 
     document.addEventListener('keydown', event => {
+        if (started == false) {
+            started = true;
+            startTime = new Date().getTime();
+        }
+        
         whenKeyPressed(event);
     })
 
@@ -64,10 +73,32 @@ function whenKeyPressed(event) {
             }
         }
 
+        const oldCursor = [cursor[0], cursor[1]];
+
         if (move) {
             updateBorder(cursor, false);
             moveCursor(cursor, numberOfWordsWithSpaces, false);
             updateBorder(cursor, true);
+        }
+
+        const updatedCurrentElement = getElementBasedOnCursor(cursor);
+        const childrenCount = updatedCurrentElement.parentElement.children.length;
+
+        if (cursor[0] == numberOfWordsWithSpaces - 1 && cursor[1] == childrenCount - 1) {
+            let sameCursor = cursor[0] == oldCursor[0] && cursor[1] == oldCursor[1];
+            if (sameCursor && updatedCurrentElement.classList.contains("correct")) {
+                updateBorder(cursor, false);
+                endTime = new Date().getTime();
+
+                const testData = {
+                    "timeTaken" : endTime - startTime,
+                    "wordCount" : numberOfWords,
+                }
+
+                setTimeout(() => {
+                    window.open("results.html");
+                }, 500);
+            }
         }
 
     } else if (event.key === "Backspace") {
@@ -164,4 +195,12 @@ function anyIncorrectSoFar(cursor) {
         }
     }
     return false;
+}
+
+function setLocalStorageKey(key, val) {
+    
+}
+
+function countIncorrectAndCorrect() {
+    count 
 }
