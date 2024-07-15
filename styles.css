@@ -30,6 +30,7 @@ h1 {
     word-spacing: 10px;
     justify-content: left;
     flex-wrap: wrap;
+    line-height: 50px;
 }
 
 .char-div {
@@ -44,20 +45,41 @@ h1 {
     padding: 50px;
 }
 
+#outer-div {
+    display: flex;
+    justify-content: center;
+}
+
 #acc, #wpm {
-    font-size: 50px;
+    font-size: 75px;
+}
+
+#results-div {
+    margin-top: 10vh;
+    width: 80vw;
+    background-color: #7e2a33;
 }
 
 #main-stats {
-    margin-left: 10vw;
     display: flex;
     flex-wrap: wrap;
     width: 100px;
-    padding: 10px;
+}
+
+#chart-div {
+    display: flex;
+    flex-wrap: wrap;
+    width: 900px;
+    background-color: #e2b714;
+}
+
+div > #main-stats {
+    width: 90px;
+    padding: 5px;
 }
 
 .small {
-    font-size: 20px;
+    font-size: 30px;
     color: rgba(220, 220, 220, 0.477);
 }
 

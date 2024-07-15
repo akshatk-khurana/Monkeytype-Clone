@@ -1,37 +1,31 @@
 const textDiv = document.querySelector('#text-div');
 const cursor = [0, 0];
-let numberOfWords = 5;
+
+let numberOfWords = 20;
 let numberOfWordsWithSpaces = numberOfWords * 2 - 1;
 let started = false;
 
+// For calculating stats
 let startTime;
 let endTime;
+let typingData = {};
+
 
 document.addEventListener('DOMContentLoaded', () => {
-    const words = [];
-    let request = fetch(`http://127.0.0.1:5000/word-generation-api/${numberOfWords}`, 
-        {
-            mode: "cors",
-            method: "GET",
-            headers: {
-                Accept: 'application/json',
-            }
-        })
-    
-    request.then(response => response.json())
-    .then((response) => {
-        let wordsList = response["words"];
-        for (let i = 0; i < wordsList.length; i++) {
-            words.push(wordsList[i]);
-            if (i != wordsList.length - 1) {
-                words.push(" ");
-            }
-        }
-        
-        constructTypingDisplay(words);
-        updateBorder(cursor, true);
-    })
+    fetchWordsAndSetup(numberOfWords);
 
+    setInterval(() => {
+        let currentTime = new Date().getTime();
+        let characterCounts = countIncorrectAndCorrect();
+
+        const currData = {
+            "timeTaken" : currentTime - startTime,
+            "charCounts" : characterCounts,
+        }
+
+        typingData[toString(currData["timeTaken"])] = currData;
+    }, 500);
+    
     document.addEventListener('keydown', event => {
         if (started == false) {
             started = true;
@@ -193,8 +187,9 @@ function anyIncorrectSoFar(cursor) {
 function countIncorrectAndCorrect() {
     const wordDivs = textDiv.children;
     let count = {
-            "inCorrectWords" : 0,
-            "inAllWords" : 0,
+            "correctWordChars" : 0,
+            "allCorrectChars" : 0,
+            "totalChars" : 0
         };
 
     for (let i = 0; i <= cursor[0]; i++) {
@@ -204,16 +199,15 @@ function countIncorrectAndCorrect() {
         for (let j = 0; j < charDivs.length; j++) {
             if (charDivs[j].classList.contains("incorrect")) {
                 allCorrect = false;
-                count["incorrect"]++;
             } else if (charDivs[j].classList.contains("correct")) {
-                count["correct"]++;
+                count["allCorrectChars"]++;
             }
         }
 
         if (allCorrect) {
-            count["inCorrectWords"] += charDivs.length;
+            count["correctWordChars"] += charDivs.length;
         } 
-        count["allCorrectWords"] += charDivs.length;
+        count["totalChars"] += charDivs.length;
     }
     return count; 
 }
@@ -233,4 +227,29 @@ function onTypeTestEnd() {
     setTimeout(() => {
         window.open("results.html");
     }, 200);
+}
+
+function fetchWordsAndSetup(number) {
+    const words = [];
+    let request = fetch(`http://127.0.0.1:5000/word-generation-api/${number}`, 
+        {
+            mode: "cors",
+            method: "GET",
+            headers: {
+                Accept: 'application/json',
+            }
+        })
+    
+    .then((response) => {
+        let wordsList = response["words"];
+        for (let i = 0; i < wordsList.length; i++) {
+            words.push(wordsList[i]);
+            if (i != wordsList.length - 1) {
+                words.push(" ");
+            }
+        }
+
+        constructTypingDisplay(words);
+        updateBorder(cursor, true);
+    })
 }
