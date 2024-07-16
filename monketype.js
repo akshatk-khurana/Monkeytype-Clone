@@ -1,7 +1,7 @@
 const textDiv = document.querySelector('#text-div');
 const cursor = [0, 0];
 
-let numberOfWords = 20;
+let numberOfWords = 10;
 let numberOfWordsWithSpaces = numberOfWords * 2 - 1;
 let started = false;
 
@@ -13,12 +13,7 @@ const typingData = {};
 document.addEventListener('DOMContentLoaded', () => {
     fetchWordsAndSetup(numberOfWords);
     
-    document.addEventListener('keydown', event => {
-        if (started == false) {
-            started = true;
-            startTime = new Date().getTime();
-        }
-        
+    document.addEventListener('keydown', event => {        
         whenKeyPressed(event);
     })
 
@@ -36,13 +31,18 @@ setInterval(() => {
 
         typingData[currData["timeTaken"]] = currData;
     }
-}, 500);
+}, 2000);
 
 function whenKeyPressed(event) {
     const key = event.key;
     let move = true;
 
     if ('abcdefghijklmnopqrstuvwxyz '.includes(key) || key == "Space") {
+        if (started == false) {
+            started = true;
+            startTime = new Date().getTime();
+        }
+
         let currentElement = getElementBasedOnCursor(cursor);
         let typed = event.key == " " ? "&nbsp;" : event.key;
 
@@ -198,17 +198,28 @@ function countIncorrectAndCorrect() {
         let allCorrect = true;
 
         for (let j = 0; j < charDivs.length; j++) {
-            if (charDivs[j].classList.contains("incorrect")) {
+            const char = charDivs[j];
+
+            let isIncorrect = char.classList.contains("incorrect");
+            let isCorrect = char.classList.contains("correct");
+            let isExtra = char.classList.contains("extra");
+
+            if (isIncorrect) {
                 allCorrect = false;
-            } else if (charDivs[j].classList.contains("correct")) {
+            } 
+            
+            if (isCorrect) {
                 count["allCorrectChars"]++;
+            }
+
+            if ((isCorrect || isIncorrect) && !isExtra) {
+                count["totalChars"]++;
             }
         }
 
         if (allCorrect) {
             count["correctWordChars"] += charDivs.length;
         } 
-        count["totalChars"] += charDivs.length;
     }
     return count; 
 }

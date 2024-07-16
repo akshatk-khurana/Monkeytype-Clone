@@ -6,13 +6,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const overallStats = calculateStats(testInfo);
     const brokenDown = testInfo["graphData"];
 
-    const timeXValues = [];
-    const rawYValues = [];
-    const wpmYValues = [];
+    const timeXValues = [0];
+    const rawYValues = [0];
+    const wpmYValues = [0];
 
     Object.keys(brokenDown).forEach(key => {
         const info = brokenDown[key];
-        console.log(info)
 
         const stats = calculateStats(info);
 
@@ -28,22 +27,33 @@ document.addEventListener('DOMContentLoaded', () => {
         type: "line",
         data: {
           labels: timeXValues,
-          datasets: [{
-            data: rawYValues,
-            borderColor: "red",
-            fill: false
-          },{
-            data: wpmYValues,
-            borderColor: "green",
-            fill: false
-          }]
+          datasets: [
+            {
+              data: rawYValues,
+              borderColor: "gray",
+              fill: false
+            },
+            {
+              data: wpmYValues,
+              borderColor: "#e2b714",
+              fill: false
+            }
+          ]
         },
         options: {
-          legend: {display: false}
+          responsive: true,
+          legend: {display: false},
+          scales: {
+            x: {
+              display: false,
+            },
+            y: {
+              min: -50,
+              max: 50,
+            }
+          }
         }
-      });
-      
-      
+    });
 })
 
 function calculateStats(data) {
