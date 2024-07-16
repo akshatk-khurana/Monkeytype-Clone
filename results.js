@@ -23,6 +23,9 @@ document.addEventListener('DOMContentLoaded', () => {
     wpmDiv.innerHTML = overallStats["wpm"];
     accDiv.innerHTML = overallStats["acc"];
 
+    let maxNum = Math.max(Math.max(...rawYValues), Math.max(...wpmYValues));
+    let maxGraphY = 10 * Math.ceil(maxNum / 10);
+
     new Chart("chart", {
         type: "line",
         data: {
@@ -41,15 +44,27 @@ document.addEventListener('DOMContentLoaded', () => {
           ]
         },
         options: {
-          responsive: true,
-          legend: {display: false},
+          plugins: {
+            legend: {
+                display: false,
+            }
+          },
+          responsive: false,
           scales: {
             x: {
               display: false,
             },
             y: {
-              min: -50,
-              max: 50,
+              title: {
+                display: true,
+                text: "Words per Minute",
+                font: {
+                  size: 15,
+                  family: 'Roboto Mono',
+                }
+              },
+              min: 0,
+              max: maxGraphY,
             }
           }
         }

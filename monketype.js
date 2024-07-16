@@ -31,7 +31,7 @@ setInterval(() => {
 
         typingData[currData["timeTaken"]] = currData;
     }
-}, 2000);
+}, 200);
 
 function whenKeyPressed(event) {
     const key = event.key;

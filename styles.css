@@ -45,46 +45,52 @@ h1 {
     padding: 50px;
 }
 
+#acc, #wpm {
+    font-size: 60px;
+}
+
+
 #outer-div {
     display: flex;
     justify-content: center;
-}
-
-#acc, #wpm {
-    font-size: 75px;
 }
 
 #results-div {
     margin-top: 10vh;
     display: flex;
     width: 80vw;
-    background-color: #7e2a33;
+    /* background-color: rgba(255, 0, 0, 0.259); */
 }
 
 #main-stats {
     display: flex;
     flex-wrap: wrap;
-    width: 5vw;
+
+    margin: 10px;
+    width: 20vw;
+    /* background-color: rgba(0, 128, 0, 0.492); */
+}
+
+#chart {
+    width: 40vw;
+    height: 100px;
 }
 
 #chart-div {
+    width: 80vw;
+
     margin: 10px;
-    width: 100vw;
-}
-
-
-#chart {
-    height: 200px;
-    width: 892px;
+    padding: 5px;
+    /* background-color: rgba(0, 0, 255, 0.478); */
 }
 
 div > #main-stats {
-    width: 90px;
+    width: 6vw;
     padding: 5px;
 }
 
 .small {
-    font-size: 30px;
+    font-size: 25px;
     color: rgba(220, 220, 220, 0.477);
 }
 
