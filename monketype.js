@@ -4,6 +4,7 @@ const cursor = [0, 0];
 let numberOfWords = 10;
 let numberOfWordsWithSpaces = numberOfWords * 2 - 1;
 let started = false;
+let pollingTime = 1000;
 
 // For calculating stats
 let startTime;
@@ -19,19 +20,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
 })
 
+
 setInterval(() => {
     if (started) {
-        let currentTime = new Date().getTime();
-        let characterCounts = countIncorrectAndCorrect();
 
-        const currData = {
-            "timeTaken" : currentTime - startTime,
-            "charCounts" : characterCounts,
-        }
-
-        typingData[currData["timeTaken"]] = currData;
     }
-}, 200);
+}, pollingTime);
 
 function whenKeyPressed(event) {
     const key = event.key;
@@ -230,6 +224,7 @@ function onTypeTestEnd() {
 
     const testData = {
         "timeTaken" : endTime - startTime,
+        "intervalTime" : endTime - startTime,
         "wordCount" : numberOfWords,
         "charCounts" : characterCounts,
         "graphData" : typingData,

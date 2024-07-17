@@ -67,6 +67,7 @@ h1 {
     flex-wrap: wrap;
 
     margin: 10px;
+    margin-right: 50px;
     width: 20vw;
     /* background-color: rgba(0, 128, 0, 0.492); */
 }

@@ -3,7 +3,7 @@ const accDiv = document.querySelector('#acc');
 
 document.addEventListener('DOMContentLoaded', () => {
     const testInfo = JSON.parse(localStorage.getItem("testData"));
-    const overallStats = calculateStats(testInfo);
+    const overallStats = calculateStats(testInfo, true);
     const brokenDown = testInfo["graphData"];
 
     const timeXValues = [0];
@@ -63,28 +63,37 @@ document.addEventListener('DOMContentLoaded', () => {
                   family: 'Roboto Mono',
                 }
               },
-              min: 0,
-              max: maxGraphY,
+              min: -100,
+              max: maxGraphY + 20,
             }
           }
         }
     });
 })
 
-function calculateStats(data) {
-    const timeMS = data["timeTaken"];
+function calculateStats(data, calculateAcc) {
+    const time = data["timeTaken"];
+    const intervalTime = data["intervalTime"];
+
     const correctWordChars = data["charCounts"]["correctWordChars"];
     const allCorrectChars = data["charCounts"]["allCorrectChars"];
     const totalChars = data["charCounts"]["totalChars"];
 
-    let multiplier = Math.floor(60000 / timeMS);
-    let wpm = Math.floor(correctWordChars / 5) * multiplier;
-    let raw = Math.floor(totalChars / 5) * multiplier;
-    let acc = Math.floor(allCorrectChars / totalChars * 100);
+    let multiplierT = Math.floor(60000 / time);
+    let multiplierIT = Math.floor(60000 / intervalTime);
 
-    return {
-        "wpm" : wpm,
-        "raw" : raw,
-        "acc" : acc,
+    let wpm = Math.floor(correctWordChars / 5) * multiplierT;
+    let raw = Math.floor(allCorrectChars / 5) * multiplierIT;
+
+    let results = {
+      "wpm" : wpm,
+      "raw" : raw,
     };
+
+    if (calculateAcc) {
+      let acc = Math.floor(allCorrectChars / totalChars * 100);
+      results["acc"] = acc;
+    }
+
+    return results;
 }
