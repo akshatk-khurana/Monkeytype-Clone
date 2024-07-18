@@ -17,13 +17,27 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('keydown', event => {        
         whenKeyPressed(event);
     })
-
 })
 
+let time = 0;
+let lastCount = 0;
 
 setInterval(() => {
     if (started) {
+        let count = countIncorrectAndCorrect();
 
+        count["allCorrectChars"] -= lastCount; 
+
+        let data = {
+            "time" : time,
+            "intervalTime" : pollingTime,
+            "charCounts" : count,
+        }
+
+        typingData[time / pollingTime] = data;
+
+        time += pollingTime;
+        console.log(time)
     }
 }, pollingTime);
 
@@ -223,9 +237,7 @@ function onTypeTestEnd() {
     const characterCounts = countIncorrectAndCorrect();
 
     const testData = {
-        "timeTaken" : endTime - startTime,
-        "intervalTime" : endTime - startTime,
-        "wordCount" : numberOfWords,
+        "time" : endTime - startTime,
         "charCounts" : characterCounts,
         "graphData" : typingData,
     }
@@ -244,7 +256,7 @@ function fetchWordsAndSetup(number) {
             mode: "cors",
             method: "GET",
             headers: {
-                Accept: 'application/json',
+                accept: 'application/json',
             }
         })
     

@@ -2,26 +2,38 @@ const wpmDiv = document.querySelector('#wpm');
 const accDiv = document.querySelector('#acc');
 
 document.addEventListener('DOMContentLoaded', () => {
+    // Overall stuff
     const testInfo = JSON.parse(localStorage.getItem("testData"));
-    const overallStats = calculateStats(testInfo, true);
+    const overallData = testInfo["charCounts"];
+    const overallTime = testInfo["time"];
+
+    const overallWPM = calculateWPM(overallData["correctWordChars"], overallTime);
+    const overallRaw = calculateWPM(overallData["allCorrectChars"], overallTime);
+    const overallAcc = calculateAcc(overallData["allCorrectChars"], overallData["totalChars"]);
+
+    wpmDiv.innerHTML = overallWPM;
+    accDiv.innerHTML = overallAcc;
+
+    // Graph stuff
     const brokenDown = testInfo["graphData"];
 
-    const timeXValues = [0];
-    const rawYValues = [0];
-    const wpmYValues = [0];
+    const timeXValues = [];
+    const rawYValues = [];
+    const wpmYValues = [];
 
     Object.keys(brokenDown).forEach(key => {
+      // "correctWordChars" : 0,
+    // "allCorrectChars" : 0,
+    // "totalChars"
         const info = brokenDown[key];
-
-        const stats = calculateStats(info);
+        const time = info["time"];
+        const intervalTime = info["intervalTime"];
 
         timeXValues.push(key);
-        rawYValues.push(stats["raw"])
-        wpmYValues.push(stats["wpm"])
+        console.log(calculateWPM(info["correctWordChars"], time))
+        wpmYValues.push(calculateWPM(info["correctWordChars"], time));
+        rawYValues.push(calculateWPM(info["allCorrectChars"], intervalTime));
     });
-
-    wpmDiv.innerHTML = overallStats["wpm"];
-    accDiv.innerHTML = overallStats["acc"];
 
     let maxNum = Math.max(Math.max(...rawYValues), Math.max(...wpmYValues));
     let maxGraphY = 10 * Math.ceil(maxNum / 10);
@@ -71,29 +83,14 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 })
 
-function calculateStats(data, calculateAcc) {
-    const time = data["timeTaken"];
-    const intervalTime = data["intervalTime"];
 
-    const correctWordChars = data["charCounts"]["correctWordChars"];
-    const allCorrectChars = data["charCounts"]["allCorrectChars"];
-    const totalChars = data["charCounts"]["totalChars"];
+// for raw and wpm
+function calculateWPM(charsTyped, time) {
+  let multiplier = Math.floor(60000 / time);
+  return Math.floor(charsTyped / 5) * multiplier;
+}
 
-    let multiplierT = Math.floor(60000 / time);
-    let multiplierIT = Math.floor(60000 / intervalTime);
-
-    let wpm = Math.floor(correctWordChars / 5) * multiplierT;
-    let raw = Math.floor(allCorrectChars / 5) * multiplierIT;
-
-    let results = {
-      "wpm" : wpm,
-      "raw" : raw,
-    };
-
-    if (calculateAcc) {
-      let acc = Math.floor(allCorrectChars / totalChars * 100);
-      results["acc"] = acc;
-    }
-
-    return results;
+// for accuracy
+function calculateAcc(charsTyped, total) {
+  return Math.floor(charsTyped / total * 100);
 }
