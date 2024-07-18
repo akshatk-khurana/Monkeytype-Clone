@@ -20,24 +20,19 @@ document.addEventListener('DOMContentLoaded', () => {
 })
 
 let time = 0;
-let lastCount = 0;
 
 setInterval(() => {
     if (started) {
         let count = countIncorrectAndCorrect();
 
-        count["allCorrectChars"] -= lastCount; 
-
         let data = {
             "time" : time,
-            "intervalTime" : pollingTime,
             "charCounts" : count,
         }
 
         typingData[time / pollingTime] = data;
 
         time += pollingTime;
-        console.log(time)
     }
 }, pollingTime);
 
@@ -237,9 +232,9 @@ function onTypeTestEnd() {
     const characterCounts = countIncorrectAndCorrect();
 
     const testData = {
-        "time" : endTime - startTime,
-        "charCounts" : characterCounts,
-        "graphData" : typingData,
+        "time": endTime - startTime,
+        "charCounts": characterCounts,
+        "graphData": typingData,
     }
 
     localStorage.setItem("testData", JSON.stringify(testData))

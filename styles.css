@@ -58,8 +58,6 @@ h1 {
 #results-div {
     margin-top: 10vh;
     display: flex;
-    width: 80vw;
-    /* background-color: rgba(255, 0, 0, 0.259); */
 }
 
 #main-stats {
@@ -67,27 +65,43 @@ h1 {
     flex-wrap: wrap;
 
     margin: 10px;
-    margin-right: 50px;
+    margin-right: 70px;
     width: 20vw;
     /* background-color: rgba(0, 128, 0, 0.492); */
 }
 
 #chart {
-    width: 40vw;
-    height: 100px;
+    margin-top: -25px;
+    width: 600px;
 }
 
 #chart-div {
-    width: 80vw;
-
+    width: 40vw;
+    display: flex;
+    flex-wrap: wrap;
     margin: 10px;
     padding: 5px;
-    /* background-color: rgba(0, 0, 255, 0.478); */
+}
+
+#chart-box {
+    width: 40vw;
+    height: 200px;
+}
+
+#other-stats {
+    margin-top: 50px;
+    width: 40vw;
+    display: flex;
 }
 
 div > #main-stats {
     width: 6vw;
     padding: 5px;
+}
+
+.holder {
+    width: 20vw;
+    margin: 50px;
 }
 
 .small {
@@ -105,4 +119,8 @@ div > #main-stats {
 
 .extra {
     color: #7e2a33;
+}
+
+#raw, #characters, #time {
+    font-size: 40px;
 }

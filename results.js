@@ -1,5 +1,8 @@
 const wpmDiv = document.querySelector('#wpm');
 const accDiv = document.querySelector('#acc');
+const rawDiv = document.querySelector('#raw');
+const charDiv = document.querySelector('#characters');
+const timeDiv = document.querySelector('#time');
 
 document.addEventListener('DOMContentLoaded', () => {
     // Overall stuff
@@ -13,41 +16,32 @@ document.addEventListener('DOMContentLoaded', () => {
 
     wpmDiv.innerHTML = overallWPM;
     accDiv.innerHTML = overallAcc;
+    timeDiv.innerHTML = `${Math.round(overallTime / 1000)}s`;
+    rawDiv.innerHTML = overallRaw;
 
     // Graph stuff
     const brokenDown = testInfo["graphData"];
 
     const timeXValues = [];
-    const rawYValues = [];
     const wpmYValues = [];
 
     Object.keys(brokenDown).forEach(key => {
-      // "correctWordChars" : 0,
-    // "allCorrectChars" : 0,
-    // "totalChars"
-        const info = brokenDown[key];
-        const time = info["time"];
-        const intervalTime = info["intervalTime"];
+        if (key != 0) {
+          const info = brokenDown[key];
+          const counts = info["charCounts"];
 
-        timeXValues.push(key);
-        console.log(calculateWPM(info["correctWordChars"], time))
-        wpmYValues.push(calculateWPM(info["correctWordChars"], time));
-        rawYValues.push(calculateWPM(info["allCorrectChars"], intervalTime));
+          timeXValues.push(key);
+          wpmYValues.push(calculateWPM(counts["correctWordChars"], info["time"]));
+        }
     });
 
-    let maxNum = Math.max(Math.max(...rawYValues), Math.max(...wpmYValues));
-    let maxGraphY = 10 * Math.ceil(maxNum / 10);
+    console.log(wpmYValues);
 
     new Chart("chart", {
         type: "line",
         data: {
           labels: timeXValues,
           datasets: [
-            {
-              data: rawYValues,
-              borderColor: "gray",
-              fill: false
-            },
             {
               data: wpmYValues,
               borderColor: "#e2b714",
@@ -64,7 +58,8 @@ document.addEventListener('DOMContentLoaded', () => {
           responsive: false,
           scales: {
             x: {
-              display: false,
+              display: true,
+              min: 0,
             },
             y: {
               title: {
@@ -75,8 +70,13 @@ document.addEventListener('DOMContentLoaded', () => {
                   family: 'Roboto Mono',
                 }
               },
-              min: -100,
-              max: maxGraphY + 20,
+              min: 0,
+              max: 200,
+              ticks: {
+                callback: function(val, index) {
+                  return val % 40 == 0 ? val : '';
+                },      
+              }
             }
           }
         }
