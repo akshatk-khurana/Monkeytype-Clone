@@ -10,6 +10,10 @@
     font-family: 'Roboto Mono';
 }
 
+a {
+    text-decoration: none;
+}
+
 body {
     background-color: #323437;
 }
@@ -72,15 +76,26 @@ header {
     color: #646669;
 }
 
+i {
+    color: #646669;
+}
+
+.option {
+    
+}
+
+.option:hover {
+    color: white;
+    cursor: pointer;
+}
+
 #results-div {
     display: flex;
     width: 40vw;
     margin: 20px;
-    background-color: #ca4754;
 }
 
 #main-stats {
-    background-color: #7e2a33;
     display: flex;
     flex-wrap: wrap;
 
@@ -91,7 +106,6 @@ header {
 }
 
 #chart-div {
-    background-color: #e2b714;
     width: 30vw;
     display: flex;
     flex-wrap: wrap;
@@ -106,23 +120,23 @@ header {
 }
 
 #other-stats {
-    margin-top: 150px;
-    width: 40vw;
+    width: 30vw;
     display: flex;
 }
 
-div > #main-stats {
-    width: 5vw;
+#main-stats > div {
+    width: 7vw;
 }
 
 .holder {
     width: 20vw;
-    margin: 50px;
 }
+
 
 .small {
     font-size: 25px;
     color: rgba(220, 220, 220, 0.477);
+    width: 5vw;
 }
 
 .correct {
@@ -139,4 +153,8 @@ div > #main-stats {
 
 #raw, #characters, #time {
     font-size: 40px;
+}
+
+#filler {
+    height: 100px;
 }

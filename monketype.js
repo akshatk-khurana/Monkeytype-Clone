@@ -6,13 +6,18 @@ let numberOfWordsWithSpaces = numberOfWords * 2 - 1;
 let started = false;
 let pollingTime = 1000;
 
-// For calculating stats
 let startTime;
 let endTime;
 const typingData = {};
 
 document.addEventListener('DOMContentLoaded', () => {
     fetchWordsAndSetup(numberOfWords);
+
+    document.querySelectorAll(".option").forEach((option) => {
+        option.addEventListener("click", (option) => {
+            console.log(option);
+        });
+    })
     
     document.addEventListener('keydown', event => {        
         whenKeyPressed(event);
@@ -244,6 +249,7 @@ function onTypeTestEnd() {
     }
 
     localStorage.setItem("testData", JSON.stringify(testData))
+    localStorage.setItem("redirect", JSON.stringify("true"))
 
     setTimeout(() => {
         window.open("results.html");
