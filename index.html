@@ -6,13 +6,31 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Typing Test</title>
         <link rel="stylesheet" href="styles.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
     </head>
     <body>
-        <br><br><br>
-        <center><h1>Typing Test</h1></center>
-        <div id="holder-div">
+        <header>
+            <div id="header-div">
+                <div id="logo-div">
+                    <img src="logo.png" width="60px">
+                </div>
+                <div id="name-div">markovtype</div>
+            </div>
+        </header>
+        <center>
+            <div id="nav-div">
+                <div>words</div>
+                <div class="spacer"></div>
+                <div>10</div>
+                <div>25</div>
+                <div>50</div>
+                <div>100</div>
+                <div id="last">
+                    <i class="fas fa-fw fa-tools"></i>
+                </div>
+            </div>
             <div id="text-div"></div>
-        </div>
+        </center>
         <script src="monketype.js"></script>
     </body>
 </html>

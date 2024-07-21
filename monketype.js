@@ -193,7 +193,8 @@ function countIncorrectAndCorrect() {
     let count = {
             "correctWordChars" : 0,
             "allCorrectChars" : 0,
-            "totalChars" : 0
+            "totalChars" : 0,
+            "extraChars" : 0,
         };
 
     for (let i = 0; i <= cursor[0]; i++) {
@@ -218,6 +219,10 @@ function countIncorrectAndCorrect() {
             if ((isCorrect || isIncorrect) && !isExtra) {
                 count["totalChars"]++;
             }
+
+            if (isExtra) {
+                count["extraChars"]++;
+            }
         }
 
         if (allCorrect) {
@@ -230,6 +235,7 @@ function countIncorrectAndCorrect() {
 function onTypeTestEnd() {
     endTime = new Date().getTime();
     const characterCounts = countIncorrectAndCorrect();
+    console.log(characterCounts);
 
     const testData = {
         "time": endTime - startTime,

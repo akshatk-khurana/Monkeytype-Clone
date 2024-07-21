@@ -5,34 +5,39 @@ const charDiv = document.querySelector('#characters');
 const timeDiv = document.querySelector('#time');
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Overall stuff
     const testInfo = JSON.parse(localStorage.getItem("testData"));
     const overallData = testInfo["charCounts"];
+
+    const correctWordChars = overallData["correctWordChars"];
+    const allCorrectChars = overallData["allCorrectChars"];
+    const totalChars = overallData["totalChars"];
+    const extraChars = overallData["extraChars"];
     const overallTime = testInfo["time"];
 
-    const overallWPM = calculateWPM(overallData["correctWordChars"], overallTime);
-    const overallRaw = calculateWPM(overallData["allCorrectChars"], overallTime);
-    const overallAcc = calculateAcc(overallData["allCorrectChars"], overallData["totalChars"]);
+    const overallWPM = calculateWPM(correctWordChars, overallTime);
+    const overallRaw = calculateWPM(allCorrectChars, overallTime);
+    const overallAcc = calculateAcc(allCorrectChars, totalChars);
 
     wpmDiv.innerHTML = overallWPM;
     accDiv.innerHTML = overallAcc;
     timeDiv.innerHTML = `${Math.round(overallTime / 1000)}s`;
     rawDiv.innerHTML = overallRaw;
+    charDiv.innerHTML = `${allCorrectChars}/${totalChars - allCorrectChars}/${extraChars}`;
 
-    // Graph stuff
     const brokenDown = testInfo["graphData"];
-
     const timeXValues = [];
     const wpmYValues = [];
 
     Object.keys(brokenDown).forEach(key => {
-        if (key != 0) {
-          const info = brokenDown[key];
-          const counts = info["charCounts"];
+      if (key != 0) {
+        const info = brokenDown[key];
+        const counts = info["charCounts"];
 
-          timeXValues.push(key);
-          wpmYValues.push(calculateWPM(counts["correctWordChars"], info["time"]));
-        }
+        timeXValues.push(key);
+        wpmYValues.push(
+          calculateWPM(counts["correctWordChars"], info["time"])
+        );
+      }
     });
 
     console.log(wpmYValues);
