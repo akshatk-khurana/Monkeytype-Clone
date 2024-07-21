@@ -1,31 +1,41 @@
 const textDiv = document.querySelector('#text-div');
+const customWordsButton = document.querySelector('#custom-button');
 const cursor = [0, 0];
 
-let numberOfWords = 10;
-let numberOfWordsWithSpaces = numberOfWords * 2 - 1;
 let started = false;
 let pollingTime = 1000;
+
+if (localStorage.getItem("words") === null) {
+    localStorage.setItem("words", 10);
+}
+
+let numberOfWords = parseInt(localStorage.getItem("words"));
+let numberOfWordsWithSpaces = numberOfWords * 2 - 1;
 
 let startTime;
 let endTime;
 const typingData = {};
 
+document.querySelectorAll(".option").forEach((option) => {
+    option.addEventListener("click", () => {
+        changeWords(option.innerHTML);
+    });
+})
+
+customWordsButton.addEventListener("click", () => {
+    let amount = prompt("How many words would you like to type?");
+    changeWords(amount);
+})
+
 document.addEventListener('DOMContentLoaded', () => {
     fetchWordsAndSetup(numberOfWords);
+})
 
-    document.querySelectorAll(".option").forEach((option) => {
-        option.addEventListener("click", (option) => {
-            console.log(option);
-        });
-    })
-    
-    document.addEventListener('keydown', event => {        
-        whenKeyPressed(event);
-    })
+document.addEventListener('keydown', event => {        
+    whenKeyPressed(event, numberOfWordsWithSpaces);
 })
 
 let time = 0;
-
 setInterval(() => {
     if (started) {
         let count = countIncorrectAndCorrect();
@@ -41,7 +51,7 @@ setInterval(() => {
     }
 }, pollingTime);
 
-function whenKeyPressed(event) {
+function whenKeyPressed(event, numWordsWithSpaces) {
     const key = event.key;
     let move = true;
 
@@ -80,17 +90,17 @@ function whenKeyPressed(event) {
 
         if (move) {
             updateBorder(cursor, false);
-            moveCursor(cursor, numberOfWordsWithSpaces, false);
+            moveCursor(cursor, numWordsWithSpaces, false);
             updateBorder(cursor, true);
         }
 
         const updatedCurrentElement = getElementBasedOnCursor(cursor);
         const childrenCount = updatedCurrentElement.parentElement.children.length;
 
-        let endOfTest = cursor[0] == numberOfWordsWithSpaces - 1 && cursor[1] == childrenCount - 1;
+        let endOfTest = cursor[0] == numWordsWithSpaces - 1 && cursor[1] == childrenCount - 1;
         let sameCursor = cursor[0] == oldCursor[0] && cursor[1] == oldCursor[1];
+
         if (endOfTest && sameCursor) {
-            // if last character was entered correctly
             if (updatedCurrentElement.classList.contains("correct") || typed == "&nbsp;") {
                 updateBorder(cursor, false);
                 onTypeTestEnd();
@@ -98,7 +108,7 @@ function whenKeyPressed(event) {
         }
 
     } else if (event.key === "Backspace") {
-        moveCursor(cursor, numberOfWordsWithSpaces, true);
+        moveCursor(cursor, numWordsWithSpaces, true);
     }
 }
 
@@ -281,3 +291,9 @@ function fetchWordsAndSetup(number) {
         updateBorder(cursor, true);
     })
 }
+
+function changeWords(amount) {
+    localStorage.setItem("words", amount);
+    location.reload();
+}
+

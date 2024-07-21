@@ -70,18 +70,8 @@ header {
     color: rgba(220, 220, 220, 0.477);
 }
 
-#nav-div > div {
-    font-size: 15px;
-    margin-left: 30px;
-    color: #646669;
-}
-
-i {
-    color: #646669;
-}
-
 .option {
-    
+    color: #646669;
 }
 
 .option:hover {
@@ -157,4 +147,23 @@ i {
 
 #filler {
     height: 100px;
+}
+
+.selected {
+    font-size: 20px;
+    color: #e2b714;
+}
+
+#nav-div > div {
+    font-size: 15px;
+    margin-left: 30px;
+}
+
+i {
+    color: #646669;
+}
+
+i:hover {
+    color: white;
+    cursor: pointer;
 }
